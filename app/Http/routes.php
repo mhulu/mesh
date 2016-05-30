@@ -8,7 +8,7 @@ Route::group(['prefix' => 'service'], function () {
 // 微信第三方平台
 Route::group(['middleware' => ['api']], function () {
     Route::any('/auth', 'WechatController@auth');
-    Route::get('/callback', 'HomeController@callback');
+    Route::get('/callback', 'Api\v1\HomeController@callback');
 });
 
 Route::get('/', function () {
