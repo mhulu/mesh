@@ -64,7 +64,9 @@ export default {
   },
   computed: {
     isBind() {
-      return this.info.mplist.length > 0
+      if (this.info.mplist !== 'undefined') {
+        return this.info.mplist.length > 0
+      }
     }
   }
 }
