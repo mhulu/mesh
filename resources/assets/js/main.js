@@ -25,8 +25,8 @@ var Ps = require('perfect-scrollbar')
 
 Vue.use(VueResource)
 // Vue.use(VueRouter)
-// Vue.http.options.root = 'http://w.stario.net/api'
-Vue.http.options.root = 'http://homestead.app/api/v1'
+Vue.http.options.root = 'http://wemesh.cn/api'
+// Vue.http.options.root = 'http://homestead.app/api/v1'
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('content');
 
 // const router = new VueRouter({
