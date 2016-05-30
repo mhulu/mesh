@@ -19,7 +19,6 @@ Route::auth();
 
 // 应用
 Route::group(['prefix' => 'home', 'middleware' => 'auth'], function () {
-    Route::get('/', 'HomeController@index');
     Route::get('/mplist', 'HomeController@mplist');
 });
 

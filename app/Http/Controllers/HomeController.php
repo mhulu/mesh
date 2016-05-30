@@ -16,9 +16,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if(empty($parmes)){
-            dd('error');
-        }
         return view('home');
     }
     public function mplist()
