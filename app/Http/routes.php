@@ -11,9 +11,9 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('/callback', 'Api\v1\HomeController@callback');
 });
 
-Route::get('/', function () {
-    return redirect('home/mplist');
-});
+// Route::get('/', function () {
+//     return redirect('home/mplist');
+// });
 
 Route::auth();
 
