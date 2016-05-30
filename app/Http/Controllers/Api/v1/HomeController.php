@@ -36,4 +36,9 @@ class HomeController extends Controller
     {
         return $this->user->menu();
     }
+
+    public function callback()
+    {
+        dd($wxData = WeOpen::getAuthorizerAccessToken($_GET['auth_code']));
+    }
 }
