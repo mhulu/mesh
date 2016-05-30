@@ -19,7 +19,7 @@ Route::auth();
 
 // 应用
 Route::group(['prefix' => 'home', 'middleware' => 'auth'], function () {
-    Route::get('/mplist', 'HomeController@mplist');
+    Route::get('mplist', 'HomeController@mplist');
 });
 
 // api
