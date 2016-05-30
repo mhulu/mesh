@@ -12,7 +12,7 @@ Route::group(['middleware' => ['api']], function () {
 });
 
 Route::get('/', function () {
-    return Redirect::to('home/mplist');
+    return redirect('home/mplist');
 });
 
 Route::auth();
