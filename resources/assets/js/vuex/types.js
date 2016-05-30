@@ -1,0 +1,2 @@
+export const TOGGLE_FULLSCREEN = 'TOGGLE_FULLSCREEN'
+export const GET_MENU_LIST = 'GET_MENU_LIST'

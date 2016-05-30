@@ -1,0 +1,43 @@
+.overlay {
+  position: fixed;
+  display: none;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(../img/cropped-staraw2.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: top center;
+  background-color: #4c5766;
+  z-index: 9999;
+}
+.overlay_open,
+.overlay_open body {
+  overflow: hidden;
+}
+.overlay_open .overlay {
+  display: flex;
+}
+.overlay_mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(0, 5, 8, 0.9); 
+}
+.overlay_content {
+  position: relative;
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  z-index: 22;
+  flex: 1;
+}
+/* slot=overlay-hide is an extra part to hide overlay */
+.overlay [slot="overlay_hide"] {
+  position: absolute;
+}
