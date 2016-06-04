@@ -126,23 +126,19 @@ class UserRepo implements InterfaceUser
         $token = $data->authorizer_info->authorizer_access_token;
         $refreshToken = $data->authorizer_info->authorizer_refresh_token;
         $wxInfo = WeOpen::fetchInfo($appid);
-        dd($wxInfo);
     }
 
     public function userInfo($wxmp_id)
     {
         $role_id = $this->user->roles->first()['id'];
         return response()->json([
-                'data'=>[
-                    'name' =>empty($this->user->name) ? $this->user->mobile : $this->user->name,
-                    'avatar' => $this->user->avatar,
-                    'role' =>$this->roles()->first()['label'],
-                    'permissions' => Role::find($role_id)->permissions,
-                    'apps' => $this->findApp($wxmp_id),
-                    'mps' => $this->wxmps(),
-                    'menu' => $this->menu($wxmp_id),
-                    'messages' => $this->messages()
-                ]
+            'name' =>empty($this->user->name) ? $this->user->mobile : $this->user->name,
+            'avatar' => $this->user->avatar,
+            'role' =>$this->roles()->first()['label'],
+            'permissions' => Role::find($role_id)->permissions,
+            'apps' => $this->findApp($wxmp_id),
+            'menu' => $this->menu($wxmp_id),
+            'messages' => $this->messages()
             ], 200);
     }
 }

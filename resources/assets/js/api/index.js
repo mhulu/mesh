@@ -1,11 +1,11 @@
-import {MenuResource, UserInfoResouce} from './resources'
+import {UserInfoResouce, WxmpResource} from './resources'
 
 export default {
-  // getMenuList: function () {
-  //   return MenuResource.get()
-  // },
-  getUserInfo: function () {
-    return UserInfoResouce.get()
+  getWxmpList: function () {
+    return WxmpResource.get()
+  },
+  getUserInfo: function (id) {
+    return UserInfoResouce.get({id})
   }
   // getMe: function () {
   //   return UserResource.get({id:'me'})

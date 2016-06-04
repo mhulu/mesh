@@ -17,15 +17,18 @@ class HomeController extends Controller
         $this->user = new UserRepo(Auth::user());
     }
 
-    public function userInfo(Request $request)
+    public function userInfo($id)
     {
-        return $this->user->userInfo($request->wxmp_id);
+        return $this->user->userInfo($id);
     }
 
     public function mplist()
     {
         $preAuthCode = WeOpen::getPreAuthCode();
-        $url = 'https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid='.config('wechat.app_id').'&pre_auth_code='.$preAuthCode.'&redirect_uri='.config('wechat.redirect_url');
+        $url = 'https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid='
+                        .config('wechat.app_id').'&pre_auth_code='
+                        .$preAuthCode.'&redirect_uri='
+                        .config('wechat.redirect_url');
         return response()->json([
                     'url' =>$url,
                     'mplist' => $this->user->wxmps()

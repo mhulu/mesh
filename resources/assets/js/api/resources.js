@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
-
-const API_ROOT = 'http://homestead.app/api/v1/'
-
+import {API_ROOT} from '../config'
+// const API_ROOT = 'http://homestead.app/api/v1/'
+// const API_ROOT = 'http://wemesh.cn'
+// Vue.http.options.root = 'http://homestead.app'
 Vue.use(VueResource)
 
-export const MenuResource = Vue.resource(API_ROOT + 'menu')
-export const UserInfoResouce = Vue.resource(API_ROOT + 'me')
+export const WxmpResource = Vue.resource(API_ROOT + 'mplist')
+export const UserInfoResouce = Vue.resource(API_ROOT + 'wxmp{/id}')
 // export const AuthResource = Vue.resource(API_ROOT + 'auth{/id}')
 // export const ArticleResource = Vue.resource(API_ROOT + 'article{/id}{/controller}')
 // export const TagResource = Vue.resource(API_ROOT + 'tags{/id}')

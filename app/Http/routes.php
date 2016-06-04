@@ -11,20 +11,21 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('/callback', 'Api\v1\HomeController@callback');
 });
 
-// Route::get('/', function () {
-//     return redirect('home/mplist');
-// });
+Route::get('/', function () {
+    return redirect('home/mplist');
+});
 
 Route::auth();
 
 // 应用
 Route::group(['prefix' => 'home', 'middleware' => 'auth'], function () {
-    Route::get('mplist', 'HomeController@mplist');
+    Route::get('mplist/', 'HomeController@mplist');
+    Route::get('/', 'HomeController@index');
 });
 
 // api
 Route::group(['prefix' => 'api/v1', 'middleware' => 'auth'], function () {
-    Route::post('me', 'Api\v1\HomeController@userInfo');
+    Route::get('wxmp/{id}', 'Api\v1\HomeController@userInfo');
     Route::get('mplist', 'Api\v1\HomeController@mplist');
     Route::get('menu', 'Api\v1\HomeController@menu');
 });

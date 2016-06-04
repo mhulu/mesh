@@ -5,9 +5,9 @@ import VueResource from 'vue-resource'
 import store from './vuex/store'
 // import { sync } from 'vuex-router-sync'
 // Comment these three for local build.
-Vue.config.devtools = false
-Vue.config.debug = false
-Vue.config.silent = true
+// Vue.config.devtools = false
+// Vue.config.debug = false
+// Vue.config.silent = true
 
 import Register from './components/Register.vue'
 import Fullscreen from './components/Fullscreen.vue'
@@ -25,8 +25,8 @@ var Ps = require('perfect-scrollbar')
 
 Vue.use(VueResource)
 // Vue.use(VueRouter)
-Vue.http.options.root = 'http://wemesh.cn/api'
-// Vue.http.options.root = 'http://homestead.app/api/v1'
+// Vue.http.options.root = 'http://wemesh.cn/api'
+// Vue.http.options.root = 'http://homestead.app/api'
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('content');
 
 // const router = new VueRouter({

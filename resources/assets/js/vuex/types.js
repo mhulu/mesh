@@ -1,2 +1,3 @@
 export const TOGGLE_FULLSCREEN = 'TOGGLE_FULLSCREEN'
 export const GET_MENU_LIST = 'GET_MENU_LIST'
+export const GET_MP_LIST = 'GET_MP_LIST'
