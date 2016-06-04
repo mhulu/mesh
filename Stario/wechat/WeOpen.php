@@ -35,9 +35,7 @@ class WeOpen
         $decryptedMsg            = $pc->decode($rebuild);
         $component_verify_ticket = XML::parse($decryptedMsg)['ComponentVerifyTicket'];
         if ($component_verify_ticket) {
-            echo "success";
             Cache::forever('wx_ticket', $component_verify_ticket);
-            Log::info('俺成功刷新了wx_ticket:'.$component_verify_ticket);
         }
     }
 
@@ -58,7 +56,6 @@ class WeOpen
             ]]);
         $data = json_decode($result->getBody());
         Cache::forever('wx_component_access_token', $data->component_access_token);
-        Log::info('俺成功刷新了wx_component_access_token'.$data->component_access_token);
     }
 
     /**
@@ -79,7 +76,6 @@ class WeOpen
         }
         $preAuthCode = $data->pre_auth_code;
         Cache::forever('wx_preAuthCode', $preAuthCode);
-        Log::info('俺获取了preAuthCode，已放进缓存');
         return $preAuthCode;
     }
     /**

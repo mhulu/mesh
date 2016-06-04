@@ -42,6 +42,7 @@ class HomeController extends Controller
 
     public function callback()
     {
-        dd($wxData = WeOpen::getAuthorizerAccessToken($_GET['auth_code']));
+        $wxData = WeOpen::getAuthorizerAccessToken($_GET['auth_code']);
+        return WeOpen::fetchInfo($wxData->authorizer_info->authorizer_appid);
     }
 }
