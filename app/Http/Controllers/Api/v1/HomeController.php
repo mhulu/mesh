@@ -24,8 +24,7 @@ class HomeController extends Controller
 
     public function mplist()
     {
-        $preAuthCode = 'aa';
-        // $preAuthCode = WeOpen::getPreAuthCode();
+        $preAuthCode = WeOpen::getPreAuthCode();
         $url = 'https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid='
                         .config('wechat.app_id').'&pre_auth_code='
                         .$preAuthCode.'&redirect_uri='
