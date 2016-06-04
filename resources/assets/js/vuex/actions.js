@@ -45,21 +45,13 @@ export const updateUserInfo = ({dispatch}) => {
  * 获取公众号信息
  */
 export const getWxmpList = ({ dispatch }) => {
-    if (window.sessionStorage.getItem('wemesh.wxmpList') === null) {
             api.getWxmpList().then(response => {
                 let json = response.data
-                window.sessionStorage.setItem('wemesh.wxmpList', JSON.stringify(json))
                 dispatch('GET_WXMP_LIST', {
                     wxmpList: json
                 })
             })
-        } else {
-            let json = JSON.parse(window.sessionStorage.getItem('wemesh.wxmpList'))
-            dispatch('GET_WXMP_LIST', {
-                wxmpList: json
-            })
         }
-}
 
 /*
 更新公众号信息  TODO!!!!!!!!!

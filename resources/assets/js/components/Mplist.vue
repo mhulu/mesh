@@ -79,7 +79,7 @@ export default {
       return store.state.wxmpList.items
     },
     isBind () {
-      return this.data.mplist.length > 0
+      return store.state.wxmpList.items.mplist.length > 0
     }
   },
   methods: {

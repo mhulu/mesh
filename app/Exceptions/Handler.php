@@ -23,10 +23,10 @@ class Handler extends ExceptionHandler
         ValidationException::class,
     ];
 
-    // protected function convertExceptionToResponse(Exception $e)
-    // {
-    //     return response()->view('errors.default', ['exception' => $e], 500);
-    // }
+    protected function convertExceptionToResponse(Exception $e)
+    {
+        return response()->view('errors.default', ['exception' => $e], 500);
+    }
 
     /**
      * Report or log an exception.
