@@ -71,6 +71,7 @@ class WeOpen
                     .$component_access_token;
         $result = self::$client->post($uri, ['json'=>["component_appid" => self::$appId]]);
         $data = json_decode($result->getBody());
+        Log::info('俺在weOpen中的74行准备获取预授权码，得到的$data是：' . $data . ',预授权码是：' . $data->pre_auth_code);
         if (empty($data->pre_auth_code)) {
             self::getComponenAccessToken();
         }
