@@ -12,15 +12,15 @@ Route::group(['middleware' => ['api']], function () {
 });
 
 Route::get('/', function () {
-    return redirect('home/mplist');
+    return redirect('mplist');
 });
 
 Route::auth();
 
 // 应用
-Route::group(['prefix' => 'home', 'middleware' => 'auth'], function () {
-    Route::get('mplist/', 'HomeController@mplist');
-    Route::get('/', 'HomeController@index');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('mplist', 'HomeController@index');
+    Route::get('home', 'HomeController@home');
 });
 
 // api

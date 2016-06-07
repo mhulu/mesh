@@ -42,7 +42,7 @@
                     <td>{{mp.nickname}}</td>
                     <td v-if="1">已授权</td>
                     <td v-else>授权已取消</td>
-                    <td><a href="" @click.stop.prevent="goHome(mp.id)" class="btn btn-azure btn-xs">进入后台</a></td>
+                    <td><a href="#" @click.stop.prevent="goHome(mp.id)"  class="btn btn-azure btn-xs">进入后台</a></td>
                   </tr>
                 </tbody>  
               </table>

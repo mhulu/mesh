@@ -120,8 +120,8 @@ class WeOpen
         $uri = 'https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_info?component_access_token='
                     .Cache::get('wx_component_access_token');
 
-        $result = $this->client->post($uri, ['json'=>[
-                "component_appid" => $this->appId,
+        $result = self::$client->post($uri, ['json'=>[
+                "component_appid" => self::$appId,
                 "authorizer_appid" => $appId,
                 ]]);
          return json_decode($result->getBody());
@@ -129,14 +129,23 @@ class WeOpen
     
     public function fetchOptionInfo($optionName)
     {
-        $uri = 'https://api.weixin.qq.com/cgi-bin/component/ api_get_authorizer_option?component_access_token'
+        $uri = 'https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_option?component_access_token'
                     .Cache::get('wx_component_access_token');
 
-        $result = $this->client->post($uri, ['json'=>[
-                "component_appid" => $this->appId,
+        $result = self::$client->post($uri, ['json'=>[
+                "component_appid" => self::$appId,
                 "authorizer_appid" => Cache::get('wx_authorizerAppId'),
                 "option_name" => $optionName
                 ]]);
+    }
+
+    public function setCookie()
+    {
+        $val = bcrypt(time());
+        if (setcookie('wxmpToken', $val, time()+7150)) {
+            return $val;
+        }
+        echo 'Somethings wrong';
     }
 }
 

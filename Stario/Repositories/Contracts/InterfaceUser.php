@@ -18,6 +18,6 @@ interface InterfaceUser
         public function allApps();
         // public function bindApp($data);
         public function hasMobile($mobile); //数据库中是否有此手机号码
-        public function saveUser($data);
-        public function updateUser($data);
+        public function create($data);
+        public function update($data);
 }

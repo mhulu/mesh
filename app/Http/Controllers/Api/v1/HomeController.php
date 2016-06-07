@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Wxmp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Star\Repositories\Eloquent\UserRepo;
+use Star\Repositories\Eloquent\WxmpRepo;
 use Star\wechat\WeOpen;
 
 class HomeController extends Controller
@@ -43,6 +45,7 @@ class HomeController extends Controller
     public function callback()
     {
         $wxData = WeOpen::getAuthorizerAccessToken($_GET['auth_code']);
-        return WeOpen::fetchInfo($wxData->authorizer_info->authorizer_appid);
+        $appId = $wxData->authorization_info->authorizer_appid;
+        $this->user->bindMp($wxData);
     }
 }

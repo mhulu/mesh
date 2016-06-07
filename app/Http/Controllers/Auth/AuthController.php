@@ -30,7 +30,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home/mplist';
+    protected $redirectTo = '/';
     protected $username = 'mobile';
     /**
      * Create a new authentication controller instance.

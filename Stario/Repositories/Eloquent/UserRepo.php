@@ -10,6 +10,7 @@ use Star\Permission\Models\Permission;
 use Star\Permission\Models\Role;
 use Star\Repositories\Contracts\InterfaceUser;
 use Star\Repositories\Eloquent\Transformer;
+use Star\Repositories\Eloquent\WxmpRepo;
 use Star\wechat\WeOpen;
 
 
@@ -85,15 +86,12 @@ class UserRepo implements InterfaceUser
         return $this->user->where('mobile', $mobile)->first();
     }
 
-    public function saveUser($data)
+    public function create($data)
     {
-        return $this->user->create([
-                'mobile' => $data['mobile'],
-                'password' => bcrypt($data['password'])
-            ]);
+        return $this->user->create($data);
     }
 
-    public function updateUser($data)
+    public function update($data)
     {
         return $this->user->where('mobile', $data['mobile'])->update(['password' => bcrypt($data['password'])]);
     }
@@ -121,10 +119,19 @@ class UserRepo implements InterfaceUser
     public function bindMp($wxData)
     {
         $user = $this->user->find($uid);
-        $data = json_decode($wxData);
-        $appid = $data->authorization_info->authorizer_appid;
-        $token = $data->authorizer_info->authorizer_access_token;
-        $refreshToken = $data->authorizer_info->authorizer_refresh_token;
+        $appid = $wxData->authorization_info->authorizer_appid;
+        $token = $wxData->authorizer_info->authorizer_access_token;
+        $refreshToken = $wxData->authorizer_info->authorizer_refresh_token;
+        $wxmp = new WxmpRepo;
+        if ($wxmp->has($appId)) {
+            echo "aaaaa";
+        } else {
+                $wxmp->create([
+                        'appId' => $appId,
+                        'token' => $token,
+                        'refresh_token' => $refreshToken
+                    ]);
+        }
         $wxInfo = WeOpen::fetchInfo($appid);
     }
 
