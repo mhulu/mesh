@@ -1,7 +1,7 @@
 var elixir = require('laravel-elixir');
 require ('laravel-elixir-vueify');
 require('laravel-elixir-imagemin');
-var gulp = require('gulp');
+
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -13,9 +13,7 @@ var gulp = require('gulp');
  |
  */
 
-if(elixir.config.production == true){
-    process.env.NODE_ENV = 'production';
-}
+
 
 elixir.config.images = {
     folder: 'img',
