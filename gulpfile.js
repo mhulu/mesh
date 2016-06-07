@@ -13,9 +13,9 @@ var gulp = require('gulp');
  |
  */
 
-// gulp.task('default',
-//   [process.env.NODE_ENV === 'production' ? 'production' : 'development']
-// );
+if(elixir.config.production == true){
+    process.env.NODE_ENV = 'production';
+}
 
 elixir.config.images = {
     folder: 'img',
