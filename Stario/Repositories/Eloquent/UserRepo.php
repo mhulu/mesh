@@ -118,13 +118,14 @@ class UserRepo implements InterfaceUser
      */
     public function bindMp($wxData)
     {
-        $user = $this->user->find($uid);
         $appid = $wxData->authorization_info->authorizer_appid;
         $token = $wxData->authorizer_info->authorizer_access_token;
         $refreshToken = $wxData->authorizer_info->authorizer_refresh_token;
+        $expires = $wxData->authorizer_info->expires_in;
         $wxmp = new WxmpRepo;
-        if ($wxmp->has($appId)) {
-            echo "aaaaa";
+        if ($wxmp->has($appid)) {
+            //如果数据库中已有改appid的微信号，直接返回
+            return true;
         } else {
                 $wxmp->create([
                         'appId' => $appId,
@@ -133,19 +134,33 @@ class UserRepo implements InterfaceUser
                     ]);
         }
         $wxInfo = WeOpen::fetchInfo($appid);
+        dd($wxInfo);
     }
 
     public function userInfo($wxmp_id)
     {
-        $role_id = $this->user->roles->first()['id'];
+        // 这个是用户在wemesh中的角色
+        // $role_id = $this->user->roles->first()['id']; 
         return response()->json([
             'name' =>empty($this->user->name) ? $this->user->mobile : $this->user->name,
-            'avatar' => $this->user->avatar,
-            'role' =>$this->roles()->first()['label'],
-            'permissions' => Role::find($role_id)->permissions,
+            'avatar' => empty($this->user->avatar) ? 'http://static.stario.net/images/avatar.png' : $this->user->avatar,
+            // 'role' =>$this->roles()->first()['label'],
+            //在wemesh中的角色调用
+            // 'permissions' => Role::find($role_id)->permissions,
+            //在公众号中的角色
+            'role' => $this->findWxmpAdmin($wxmp_id)->id == $this->user->id ? '公众号管理员' : '公众号运营者',
             'apps' => $this->findApp($wxmp_id),
             'menu' => $this->menu($wxmp_id),
             'messages' => $this->messages()
             ], 200);
+    }
+/**
+ * 将微信公众号中绑定的第一个用户作为管理员
+ * @param  [int] $wxmp_id 
+ * @return App\User
+ */
+    private function findWxmpAdmin($wxmp_id)
+    {
+        return Wxmp::find($wxmp_id)->users->first();
     }
 }

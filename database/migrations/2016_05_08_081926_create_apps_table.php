@@ -16,8 +16,6 @@ class CreateAppsTable extends Migration
             $table->increments('id');
             $table->string('name', 60);
             $table->string('description', 100);
-            $table->timestamp('deadline'); //过期时间
-            $table->bigInteger('price');//每年的价格
             $table->string('icon', 60);
             $table->timestamps();
         });

@@ -5,7 +5,7 @@
         <img src="http://static.stario.net/images/wemesh_logo.png">
         <h5>微脉事 WeMesh&trade;</h5>
         <!-- 绑定公众号 -->
-         <div v-show="!isBind" transition="fade" class="col-md-12  margin-bottom-40">
+         <div v-cloak v-show="!isBind" transition="fade" class="col-md-12  margin-bottom-40">
           <div class="panel">
           <div class="panel-heading">
             <h3><img src="http://static.stario.net/images/icon32_appwx_logo.png" alt="wechat_logo"> 绑定您的公众号</h3>
@@ -79,7 +79,11 @@ export default {
       return store.state.wxmpList.items
     },
     isBind () {
-      return store.state.wxmpList.items.mplist.length > 0
+      if ( undefined !== this.data.mplist && this.data.mplist.length) {
+        return this.data.mplist.length > 0
+      } else {
+        return false
+      }
     }
   },
   methods: {

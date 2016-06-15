@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-        $this->call(PermissionsTableSeeder::class);
+        // $this->call(PermissionsTableSeeder::class);
         $this->call(AppsTableSeeder::class);
         $this->call(MenusTableSeeder::class);
-        $this->call(MessagesTableSeeder::class);
-        $this->call(WxmpsTableSeeder::class);
+        // $this->call(MessagesTableSeeder::class);
+        // $this->call(WxmpsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
     }
 }

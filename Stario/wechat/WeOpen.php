@@ -71,7 +71,6 @@ class WeOpen
                     .$component_access_token;
         $result = self::$client->post($uri, ['json'=>["component_appid" => self::$appId]]);
         $data = json_decode($result->getBody());
-        Log::info('俺在weOpen中的74行准备获取预授权码,预授权码是：' . $data->pre_auth_code);
         if (empty($data->pre_auth_code)) {
             self::getComponenAccessToken();
         }
@@ -110,7 +109,8 @@ class WeOpen
                 "authorizer_refresh_token" => Cache::get('wx_refreshKey')
                 ]]);
         $data = json_decode($result->getBody());
-        Cache::forever('wx_authorizer_access_token', $data->authorizer_access_token);
+        return $data->authorizer_access_token;
+        // Cache::forever('wx_authorizer_access_token', $data->authorizer_access_token);
     }
 
     /**
@@ -139,16 +139,6 @@ class WeOpen
                 "option_name" => $optionName
                 ]]);
     }
-
-    public function setCookie()
-    {
-        $val = bcrypt(time());
-        if (setcookie('wxmpToken', $val, time()+7150)) {
-            return $val;
-        }
-        echo 'Somethings wrong';
-    }
-}
 
     WeOpen::$client = new Client;
     WeOpen::$appId = config('wechat.app_id');

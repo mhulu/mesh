@@ -18,11 +18,10 @@ class CreateWxmpsTable extends Migration
             $table->string('name', 50)->nullable();
             $table->string('nickname', 50)->nullable();
             $table->boolean('authorized')->nullable();
-            $table->string('token')->nullable();
+            $table->string('token')->unique();
             $table->string('refresh_token');
             $table->string('avatar_url')->nullable();
             $table->string('qr_url')->nullable();
-            $table->string('token')->unique();
             $table->timestamps();
         });
     }

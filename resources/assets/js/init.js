@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Register from './components/Register.vue'
 import Findpass from './components/Findpass.vue'
 import Mplist from './components/Mplist.vue'
+import Callback from './components/Callback.vue'
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 // Vue.http.options.root = 'http://wemesh.cn'
@@ -9,5 +10,5 @@ Vue.use(VueResource)
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('content');
 new Vue({
     el:  'body',
-    components: {Register, Findpass, Mplist}
+    components: {Register, Findpass, Mplist, Callback}
 })

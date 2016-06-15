@@ -50,8 +50,7 @@ $factory->define(App\Wxmp::class, function ($faker) {
 $factory->define(Star\Permission\Models\Role::class, function ($faker) {
     return [
         'name' => $faker->randomElement($array = array('admin','user','vip','advanced')),
-        'label' => $faker->randomElement($array = array('管理员','标准用户','VIP','高级用户')),
-        'description' => $faker->randomElement($array = array('拥有最高权限','可以管理自己的资源','可以管理自己的资源','可以管理自己的资源')),
+        'label' => $faker->randomElement($array = array('管理员','标准用户','VIP','高级用户'))
     ];
 });
 
@@ -59,8 +58,7 @@ $factory->define(Star\Permission\Models\Permission::class, function ($faker) {
     return [
         'name' => $faker->randomElement($array = array('edit','root','view','delete')),
         'label' => $faker->randomElement($array = array('编辑','管理','查看','删除')),
-        'description' => $faker->randomElement($array = array('拥有最高权限','可以管理自己的资源','可以管理自己的资源','可以管理自己的资源')),
-    ];
+      ];
 });
 
 $factory->define(App\User::class, function ($faker) {

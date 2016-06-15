@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
              $table->string('email');
              $table->string('password');
              $table->boolean('active')->default(1);
-             $table->string('avatar')->default('http://static.stario.net/images/avatar.png');
+             $table->string('avatar')->nullable;
              $table->rememberToken();
              $table->timestamp('last_login');
              $table->string('last_ip',45);

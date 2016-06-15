@@ -14,7 +14,7 @@ class CreateAuthTables extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('label')->nullable();
-            $table->string('description')->nullable();
+            $table->tinyInteger('level')->default(0);
             $table->timestamps();
         });
 
@@ -22,7 +22,6 @@ class CreateAuthTables extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('label')->nullable();
-            $table->string('description')->nullable();
             $table->timestamps();
         });
 
