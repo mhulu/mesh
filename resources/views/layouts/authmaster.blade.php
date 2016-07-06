@@ -15,7 +15,7 @@
   <link href="//cdn.bootcss.com/jquery.perfect-scrollbar/0.6.10/css/perfect-scrollbar.min.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
   <link rel="shortcut icon" href="{{asset('favicon.ico')}}" />
-  <link rel="stylesheet" href="{{asset('css/app.css')}}">
+  <link href=/static/app.89073a743fbf800b23a1f035e8676be6.css rel=stylesheet>
 </head>
 
 <body>
@@ -28,5 +28,4 @@
       @yield('content')
     </div>
   </div>
-<script src="{{asset('js/init.js')}}"></script>
 </body>

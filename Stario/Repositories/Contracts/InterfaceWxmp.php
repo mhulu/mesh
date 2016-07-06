@@ -6,7 +6,8 @@ namespace Star\Repositories\Contracts;
  */
 interface InterfaceWxmp
 {
-        public function has($appId); //数据库中是否该微信
+        public function has($column, $value); //数据库中是否该微信
         public function create($data);
-        // public function updateWxmp($data);
+        public function update($data);
+        public function destroy($uid);
 }

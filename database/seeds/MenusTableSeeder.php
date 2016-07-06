@@ -12,7 +12,7 @@ class MenusTableSeeder extends Seeder
      */
     public function run()
     {
-       $menus = [
+        $menus = [
        // 父级菜单
             [
             'name' => '微信功能',
@@ -72,31 +72,7 @@ class MenusTableSeeder extends Seeder
             'app_id' => 1,
             'parent_id' => 1
             ],
-            // 第二梯队
-            [
-            'name' => '消息管理',
-            'url' => 'messages',，
-            'icon' => 'commenting-o',
-            'description' => '消息管理',
-            'app_id' => 1,
-            'parent_id' => 2
-            ],
-            [
-            'name' => '用户管理',
-            'url' => 'users',
-            'icon' => 'users',
-            'description' => '消息管理',
-            'app_id' => 1,
-            'parent_id' => 2
-            ],
-            [
-            'name' => '素材管理',
-            'url' => 'raw',
-            'icon' => 'file-text',
-            'description' => '素材管理',
-            'app_id' => 1,
-            'parent_id' => 2
-            ],
+         
             // 第三梯队
             [
             'name' => '用户分析',
@@ -130,9 +106,9 @@ class MenusTableSeeder extends Seeder
             'app_id' => 1,
             'parent_id' => 3
             ]
-       ];
-       foreach ($menus as $menu) {
-           Menu::create($menu);
-       }
+        ];
+        foreach ($menus as $menu) {
+            Menu::create($menu);
+        }
     }
 }

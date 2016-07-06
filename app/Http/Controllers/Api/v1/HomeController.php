@@ -17,8 +17,8 @@ class HomeController extends Controller
     protected $user;
     public function __construct()
     {
-        $this->user = new UserRepo(Auth::user());
-        // $this->user = new UserRepo(Auth::loginUsingId(1, true));
+        // $this->user = new UserRepo(Auth::user());
+        $this->user = new UserRepo(Auth::loginUsingId(1, true));
     }
 
     public function userInfo($id)
@@ -28,6 +28,7 @@ class HomeController extends Controller
     public function mplist()
     {
         $preAuthCode = WeOpen::getPreAuthCode();
+        // $preAuthCode = 'aa';
         $url = 'https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid='
                         .config('wechat.app_id').'&pre_auth_code='
                         .$preAuthCode.'&redirect_uri='
@@ -45,20 +46,17 @@ class HomeController extends Controller
 
     public function callback()
     {
-        // $wxData = WeOpen::getAuthorizerAccessToken($_GET['auth_code']);
-        // $this->user->bindMp($wxData);
-        // TODO
-        // 1. 如果顺利获得上面的数据，返回一个视图
-        // 2.该视图提示正在同步数据，其时将数据入库
-        // 3.显示按钮，点击根据ID进入后台
-        $expiresAt = Carbon::now()->addMinutes(118)->toRfc2822String();
-        $cookie_name = uniqid();
-        $cookie_value = bcrypt(time() + 715);
-        \Cache::put($cookie_name, $cookie_value, $expiresAt);
-        return response()->json([
-            'cookie_name' => $cookie_name,
-            'cookie_value' =>  $cookie_value,
-            'cookie_expires' => $expiresAt
-        ]);
+        $wxData = WeOpen::getAuthorizerAccessToken($_GET['auth_code']);
+        $data = $this->user->bindMp($wxData);
+        if ($data) {
+            return redirect('/');
+        }
+    }
+    public function delWxmp($id)
+    {
+        if ($this->user->isTheLastOneInWxmp(Auth::user()->id, $id)) {
+            $this->user->deleteWxmp($id);
+        }
+            $this->user->detachWxmp($id);
     }
 }

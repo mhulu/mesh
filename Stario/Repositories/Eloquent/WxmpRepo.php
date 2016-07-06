@@ -14,12 +14,24 @@ class WxmpRepo implements InterfaceWxmp
     {
         $this->wxmp = new Wxmp;
     }
-    public function has($appId)
+    public function has($column, $val)
     {
-        return $this->wxmp->where('appId', $appId)->first();
+        return $this->wxmp->where($column, $val)->first();
     }
     public function create($data)
     {
         return $this->wxmp->create($data);
+    }
+    public function update($data)
+    {
+        return $this->wxmp->update($data);
+    }
+    public function getId($column, $val)
+    {
+        return $this->wxmp->where($column, $val)->first()->id;
+    }
+    public function destroy($uid)
+    {
+        return $this->wxmp->users()->detach($uid);
     }
 }

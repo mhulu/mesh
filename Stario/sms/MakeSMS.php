@@ -26,12 +26,4 @@ class MakeSMS
         	$content = preg_replace($pattern, $code, \Config::get('sms.Templates.authcode'));
         	return $content;
     }
-    // public function makeNotify()
-    // {
-    	
-    // }
-    // public function makeError()
-    // {
-    	
-    // }
 }

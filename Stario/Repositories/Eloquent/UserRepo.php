@@ -4,6 +4,7 @@ namespace Star\Repositories\Eloquent;
 use App\App;
 use App\User;
 use App\Wxmp;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Star\Permission\Models\Permission;
@@ -12,7 +13,6 @@ use Star\Repositories\Contracts\InterfaceUser;
 use Star\Repositories\Eloquent\Transformer;
 use Star\Repositories\Eloquent\WxmpRepo;
 use Star\wechat\WeOpen;
-
 
 class UserRepo implements InterfaceUser
 {
@@ -62,7 +62,7 @@ class UserRepo implements InterfaceUser
     public function messages()
     {
         $messages = $this->user->messages;
-        return $messages->map(function($item){
+        return $messages->map(function ($item) {
             return [
                 'body' => $item->body,
                 'type' => $this->numToChar($item->type, ['系统','用户','微信']),
@@ -102,13 +102,39 @@ class UserRepo implements InterfaceUser
      */
     public function wxmps()
     {
-        $mps = $this->user->wxmps()->get();
-        return $mps;
+        return $this->user->wxmps()->get();
+    }
+    /**
+     * 当前用户是否关联了某个公众号
+     * @param  [type]  $wxmp_id [description]
+     * @return boolean          [description]
+     */
+    public function hasWxmp($wxmp_id)
+    {
+        return \DB::table('user_wxmp')
+                                ->whereUserId($this->user->id)
+                                ->whereWxmpId($wxmp_id)
+                                ->count() > 0;
     }
 
     public function findMpBy($field)
     {
         
+    }
+
+    public function detachWxmp($wxmp_id)
+    {
+        return $this->user->wxmps()->detach($wxmp_id);
+    }
+
+    public function attachWxmp($wxmp_id)
+    {
+        return $this->user->wxmps()->attach($wxmp_id);
+    }
+
+    public function deleteWxmp($id)
+    {
+        return Wxmp::destroy($id);
     }
 
     /**
@@ -118,29 +144,36 @@ class UserRepo implements InterfaceUser
      */
     public function bindMp($wxData)
     {
-        $appid = $wxData->authorization_info->authorizer_appid;
-        $token = $wxData->authorizer_info->authorizer_access_token;
-        $refreshToken = $wxData->authorizer_info->authorizer_refresh_token;
-        $expires = $wxData->authorizer_info->expires_in;
-        $wxmp = new WxmpRepo;
-        if ($wxmp->has($appid)) {
-            //如果数据库中已有改appid的微信号，直接返回
+        $appId = $wxData->authorization_info->authorizer_appid;
+        $wxInfo = WeOpen::fetchInfo($appId);
+        $token = $wxData->authorization_info->authorizer_access_token;
+        $refreshToken = $wxData->authorization_info->authorizer_refresh_token;
+        $expires = $wxData->authorization_info->expires_in;
+        $wxmp = new WxmpRepo();
+        //如果库里没有该公众号则创建并关联user_wxmp
+        if (!$wxmp->has('appId', $appId)) {
+            return $this->user->wxmps()->create([
+                        'appId' => $appId,
+                        'name' => $wxInfo->authorizer_info->user_name,
+                        'nickname' => $wxInfo->authorizer_info->nick_name,
+                        'authorized' => true,
+                        'avatar_url' => $wxInfo->authorizer_info->head_img,
+                        'qr_url' => $wxInfo->authorizer_info->qrcode_url,
+                        'token' => $token,
+                        'refresh_token' => $refreshToken,
+                        'expires' => Carbon::now()->addSeconds($expires)
+                    ]);
+        } elseif (!$this->hasWxmp($wxmp->getId('appId', $appId))) {
+            $this->attachWxmp($wxmp->getId('appId', $appId));
             return true;
         } else {
-                $wxmp->create([
-                        'appId' => $appId,
-                        'token' => $token,
-                        'refresh_token' => $refreshToken
-                    ]);
+            return true;
         }
-        $wxInfo = WeOpen::fetchInfo($appid);
-        dd($wxInfo);
     }
-
     public function userInfo($wxmp_id)
     {
-        // 这个是用户在wemesh中的角色
-        // $role_id = $this->user->roles->first()['id']; 
+        // 这个是用户在wemesh中的角色,不是公众号的角色
+        // $role_id = $this->user->roles->first()['id'];
         return response()->json([
             'name' =>empty($this->user->name) ? $this->user->mobile : $this->user->name,
             'avatar' => empty($this->user->avatar) ? 'http://static.stario.net/images/avatar.png' : $this->user->avatar,
@@ -148,7 +181,7 @@ class UserRepo implements InterfaceUser
             //在wemesh中的角色调用
             // 'permissions' => Role::find($role_id)->permissions,
             //在公众号中的角色
-            'role' => $this->findWxmpAdmin($wxmp_id)->id == $this->user->id ? '公众号管理员' : '公众号运营者',
+            'role' => $this->isTheFirstOneInWxmp($this->user->id, $wxmp_id) ? '公众号管理员' : '公众号运营者',
             'apps' => $this->findApp($wxmp_id),
             'menu' => $this->menu($wxmp_id),
             'messages' => $this->messages()
@@ -159,8 +192,18 @@ class UserRepo implements InterfaceUser
  * @param  [int] $wxmp_id 
  * @return App\User
  */
-    private function findWxmpAdmin($wxmp_id)
+    public function isTheFirstOneInWxmp($user_id, $wxmp_id)
     {
-        return Wxmp::find($wxmp_id)->users->first();
+        return Wxmp::find($wxmp_id)->users->first()->id == $user_id;
+    }
+
+    //判断当前用户是否是公众号管理者的最后一位
+    public function isTheLastOneInWxmp($user_id, $wxmp_id)
+    {
+        $wxmp = Wxmp::find($wxmp_id);
+        if (count($wxmp->users) == 1 && $wxmp->users->first()->id == $user_id) {
+            return true;
+        }
+        return false;
     }
 }

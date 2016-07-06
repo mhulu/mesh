@@ -22,6 +22,7 @@ class CreateWxmpsTable extends Migration
             $table->string('refresh_token');
             $table->string('avatar_url')->nullable();
             $table->string('qr_url')->nullable();
+            $table->timestamp('expires');
             $table->timestamps();
         });
     }

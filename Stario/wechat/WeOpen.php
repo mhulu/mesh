@@ -14,11 +14,13 @@ class WeOpen
     public static $secureKey;
     public static $token;
     public static $aeskey;
-    /**
-   * STEP 1:获取微信POST过来的授权数据后取得component_verify_ticket并缓存
-   */
 
-    public static function getComponentVerifyTicket()
+    /**
+   * STEP 1:获取微信推送信息，通常有以下几种情况：
+   * 1.推送ComponentVerifyTicket
+   * 2.推送InfoType(授权成功、取消授权、更新授权列表)
+   */
+    public static function getWxPostData()
     {
         //微信发送过来的URL参数,供解密使用
         $nonce = $_GET['nonce'];
@@ -33,10 +35,12 @@ class WeOpen
         $rebuild                 = XML::build(['ToUserName'=>'toUser','Encrypt'=>$encrypt]);
         $pc  = new AES(self::$aeskey, self::$appId, self::$token);
         $decryptedMsg            = $pc->decode($rebuild);
-        $component_verify_ticket = XML::parse($decryptedMsg)['ComponentVerifyTicket'];
-        if ($component_verify_ticket) {
-            Cache::forever('wx_ticket', $component_verify_ticket);
+        $result = XML::parse($decryptedMsg);
+        // 如果是ComponentVerifyTicket则写入缓存
+        if (!empty($result['ComponentVerifyTicket'])) {
+            Cache::forever('wx_ticket', $result['ComponentVerifyTicket']);
         }
+        return $result;
     }
 
     /**
@@ -45,10 +49,10 @@ class WeOpen
     */
     public static function getComponenAccessToken()
     {
-        $ticket = Cache::get('wx_ticket');
-        if (empty ($ticket = Cache::get('wx_ticket'))) {
+        if (empty (Cache::get('wx_ticket'))) {
             return 'Please wait 10 minutes.';
         }
+        $ticket = Cache::get('wx_ticket');
         $uri = 'https://api.weixin.qq.com/cgi-bin/component/api_component_token';
         $result = self::$client->post($uri, ['json'=>["component_appid" => self::$appId,
                 "component_appsecret" => self::$secureKey,
@@ -63,9 +67,9 @@ class WeOpen
      */
     public static function getPreAuthCode()
     {
-        if (empty ($component_access_token = Cache::get('wx_component_access_token'))) {
+        $component_access_token = Cache::get('wx_component_access_token');
+        if (empty ($component_access_token)) {
             self::getComponenAccessToken();
-            $component_access_token = Cache::get('wx_component_access_token');
         }
         $uri = 'https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode?component_access_token='
                     .$component_access_token;
@@ -73,10 +77,12 @@ class WeOpen
         $data = json_decode($result->getBody());
         if (empty($data->pre_auth_code)) {
             self::getComponenAccessToken();
+        } else {
+            $preAuthCode = $data->pre_auth_code;
+            Cache::forever('wx_preAuthCode', $preAuthCode);
+            return $preAuthCode;
         }
-        $preAuthCode = $data->pre_auth_code;
-        Cache::forever('wx_preAuthCode', $preAuthCode);
-        return $preAuthCode;
+
     }
     /**
      * STEP 4: 换取authorizer_access_token和authorizer_refresh_token
@@ -98,18 +104,17 @@ class WeOpen
     }
 
     //使用authorizer_refresh_token刷新authorizer_access_token
-    public static function refreshAuthorizeToken()
+    public static function refreshAuthorizeToken($appId, $refreshToken)
     {
-        $uri = 'https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token='
+        $uri = 'https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token='
                     .Cache::get('wx_component_access_token');
-
         $result = self::$client->post($uri, ['json'=>[
                 "component_appid" => self::$appId,
-                "authorizer_appid" => Cache::get('wx_authorizerAppId'),
-                "authorizer_refresh_token" => Cache::get('wx_refreshKey')
+                //TODO 下面两个替换，已经不在缓存中了
+                "authorizer_appid" => $appId,
+                "authorizer_refresh_token" => $refreshToken
                 ]]);
-        $data = json_decode($result->getBody());
-        return $data->authorizer_access_token;
+        return json_decode($result->getBody());
         // Cache::forever('wx_authorizer_access_token', $data->authorizer_access_token);
     }
 
@@ -139,9 +144,10 @@ class WeOpen
                 "option_name" => $optionName
                 ]]);
     }
-
+}
     WeOpen::$client = new Client;
     WeOpen::$appId = config('wechat.app_id');
     WeOpen::$secureKey  = config('wechat.secret');
     WeOpen::$token  = config('wechat.token');
     WeOpen::$aeskey = config('wechat.aes_key');
+

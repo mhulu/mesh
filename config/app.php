@@ -109,7 +109,7 @@ return [
     */
 
     'log' => env('APP_LOG', 'single'),
-
+    'log_max_files' => 7,
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -147,7 +147,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Dingo\Api\Provider\LaravelServiceProvider::class,
+        // Dingo\Api\Provider\LaravelServiceProvider::class,
         // Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         /*
          * Application Service Providers...
@@ -203,8 +203,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'APIRoute'  => Dingo\Api\Facade\Route::class,
-        'API'       => Dingo\Api\Facade\API::class,
+        // 'APIRoute'  => Dingo\Api\Facade\Route::class,
+        // 'API'       => Dingo\Api\Facade\API::class,
         // 'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         // 'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ],
